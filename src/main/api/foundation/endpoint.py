@@ -5,6 +5,8 @@ from dataclasses import dataclass
 
 from src.main.api.models.account_deposit_request import AccountDepositRequest
 from src.main.api.models.account_deposit_response import AccountDepositResponse
+from src.main.api.models.account_transfer_request import AccountTransferRequest
+from src.main.api.models.account_transfer_response import AccountTransferResponse
 from src.main.api.models.base_model import BaseModel
 from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
@@ -48,4 +50,10 @@ class Endpoint(Enum):
         request_model=AccountDepositRequest,
         url="/account/deposit",
         response_model=AccountDepositResponse
+    )
+
+    ACCOUNT_TRANSFER = EndpointConfiguration(
+        request_model=AccountTransferRequest,
+        url="/account/transfer",
+        response_model=AccountTransferResponse
     )

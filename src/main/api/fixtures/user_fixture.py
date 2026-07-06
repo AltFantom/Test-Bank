@@ -9,3 +9,9 @@ def create_user_request(api_manager):
     user_request = RandomModelGenerator.generate(CreateUserRequest)
     api_manager.admin_steps.create_user(user_request)
     return user_request
+
+@pytest.fixture
+def create_user_account(api_manager, create_user_request):
+    def account():
+        return api_manager.user_steps.create_account_valid(create_user_request)
+    return account
