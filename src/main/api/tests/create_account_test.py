@@ -16,3 +16,8 @@ class TestCreateAccount:
         account_from_db = AccountCrudDb.get_account_by_id(db_session, response.id)
         assert account_from_db.id == response.id, "Аккаунт не создан, id аккаунта нет в БД"
         assert account_from_db.balance is not None, "Поле созданного для созданного аккаунта отсутствует в БД"
+
+    def test_create_third_account(self, db_session: Session, api_manager: ApiManager, create_user_request: CreateUserRequest):
+        api_manager.user_steps.create_account_valid(create_user_request)
+        api_manager.user_steps.create_account_valid(create_user_request)
+        api_manager.user_steps.create_account_invalid(create_user_request)

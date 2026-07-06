@@ -9,11 +9,19 @@ from src.main.api.steps.base_steps import BaseSteps
 
 
 class UserSteps(BaseSteps):
-    def create_account(self, create_user_request: CreateUserRequest):
+    def create_account_valid(self, create_user_request: CreateUserRequest):
         response = ValidateCrudRequester(
             request_spec=RequestSpecs.auth_headers(create_user_request.username, create_user_request.password),
             endpoint=Endpoint.CREATE_ACCOUNT,
             response_spec=ResponseSpecs.request_created(),
+        ).post()
+        return response
+
+    def create_account_invalid(self, create_user_request: CreateUserRequest):
+        response = CrudRequester(
+            request_spec=RequestSpecs.auth_headers(create_user_request.username, create_user_request.password),
+            endpoint=Endpoint.CREATE_ACCOUNT,
+            response_spec=ResponseSpecs.request_conflict(),
         ).post()
         return response
 
