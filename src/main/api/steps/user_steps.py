@@ -4,8 +4,8 @@ from src.main.api.foundation.requesters.validate_crud_requester import ValidateC
 from src.main.api.models.account_deposit_request import AccountDepositRequest
 from src.main.api.models.account_transfer_request import AccountTransferRequest
 from src.main.api.models.account_transfer_response import AccountTransferResponse
-from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
+from src.main.api.models.create_user_response import CreateUserResponse
 from src.main.api.specs.request_specs import RequestSpecs
 from src.main.api.specs.response_specs import ResponseSpecs
 from src.main.api.steps.base_steps import BaseSteps
@@ -31,9 +31,9 @@ class UserSteps(BaseSteps):
         return response
 
     @staticmethod
-    def account_deposit_valid(create_user_account, create_user_request: CreateUserRequest, amount: float):
+    def account_deposit_valid(create_user_account: CreateUserResponse, create_user_request: CreateUserRequest, amount: float):
         account_deposit_request = AccountDepositRequest(
-            accountId=create_user_account().id,
+            accountId=create_user_account.id,
             amount=amount
         )
         response = ValidateCrudRequester(
@@ -57,10 +57,10 @@ class UserSteps(BaseSteps):
         ).post(account_deposit_request)
         return user_acc
 
-    def account_transfer_valid(self, create_user_account, create_user_request: CreateUserRequest, amount: float) -> AccountTransferResponse:
+    def account_transfer_valid(self, create_user_account, create_user_request: CreateUserRequest, amount: float, deposit_amount) -> AccountTransferResponse:
         first_account = create_user_account()
-        self.account_deposit_valid(first_account, create_user_request, 9000)
-        self.account_deposit_valid(first_account, create_user_request, 9000)
+        self.account_deposit_valid(first_account, create_user_request, deposit_amount)
+        self.account_deposit_valid(first_account, create_user_request, deposit_amount)
         second_account = create_user_account()
         account_transfer_request = AccountTransferRequest(
             fromAccountId=first_account.id,

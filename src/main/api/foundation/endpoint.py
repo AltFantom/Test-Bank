@@ -8,6 +8,10 @@ from src.main.api.models.account_deposit_response import AccountDepositResponse
 from src.main.api.models.account_transfer_request import AccountTransferRequest
 from src.main.api.models.account_transfer_response import AccountTransferResponse
 from src.main.api.models.base_model import BaseModel
+from src.main.api.models.creadit_repay_request import CreditRepayRequest
+from src.main.api.models.creadit_repay_response import CreditRepayResponse
+from src.main.api.models.creadit_request_request import CreditRequestRequest
+from src.main.api.models.creadit_request_respone import CreditRequestResponse
 from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.create_user_response import CreateUserResponse
@@ -56,4 +60,16 @@ class Endpoint(Enum):
         request_model=AccountTransferRequest,
         url="/account/transfer",
         response_model=AccountTransferResponse
+    )
+
+    CREDIT_REQUEST = EndpointConfiguration(
+        request_model=CreditRequestRequest,
+        url="/credit/request",
+        response_model=CreditRequestResponse
+    )
+
+    CREDIT_REPAY = EndpointConfiguration(
+        request_model=CreditRepayRequest,
+        url="/credit/repay",
+        response_model=CreditRepayResponse
     )

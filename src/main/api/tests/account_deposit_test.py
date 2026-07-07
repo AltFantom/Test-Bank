@@ -12,8 +12,9 @@ class TestAccountDeposit:
     @pytest.mark.parametrize(
         "amount", [1000, 1500.9, 9000.0]
     )
-    def test_account_deposit_valid(self, db_session: Session, api_manager: ApiManager, create_user_request: CreateUserRequest, create_user_account: CreateAccountResponse, amount: float):
-        response = api_manager.user_steps.account_deposit_valid(create_user_account, create_user_request, amount)
+    def test_account_deposit_valid(self, db_session: Session, api_manager: ApiManager, create_user_request: CreateUserRequest, create_user_account, amount: float):
+        account = create_user_account()
+        response = api_manager.user_steps.account_deposit_valid(account, create_user_request, amount)
         account_from_db = AccountCrudDb.get_account_by_id(db_session, response.id)
 
         assert response.balance == amount

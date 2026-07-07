@@ -8,6 +8,7 @@ from src.main.api.models.create_user_request import CreateUserRequest
 
 @pytest.mark.api
 class TestAccountTransfer:
+    MAX_AMOUNT_DEPOSIT = 9000.0
     @pytest.mark.parametrize(
         "amount", [500, 5555.5, 10000.0]
     )
@@ -19,11 +20,11 @@ class TestAccountTransfer:
             create_user_account,
             amount: float
     ):
-        response = api_manager.user_steps.account_transfer_valid(create_user_account, create_user_request, amount)
+        response = api_manager.user_steps.account_transfer_valid(create_user_account, create_user_request, amount, self.MAX_AMOUNT_DEPOSIT)
         account_from_db = AccountCrudDb.get_account_by_id(db_session, response.fromAccountId)
 
-        assert response.fromAccountIdBalance == 18000 - amount
-        assert account_from_db.balance == 18000 - amount
+        assert response.fromAccountIdBalance == self.MAX_AMOUNT_DEPOSIT * 2 - amount
+        assert account_from_db.balance == self.MAX_AMOUNT_DEPOSIT * 2 - amount
 
     @pytest.mark.parametrize(
         "amount", [1500, 2500]
