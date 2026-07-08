@@ -24,8 +24,8 @@ class TestCreditRepay:
         response = api_manager.credit.credit_repay_valid(create_credit_request, create_credit_account, amount, term_months)
         credit_from_db = CreditCrudDb.get_credit_by_id(db_session, response.creditId)
 
-        assert credit_from_db.balance == 0
-        assert response.amountDeposited == amount
+        assert credit_from_db.balance == 0, "Кредит остался в БД"
+        assert response.amountDeposited == amount, "Сумма пополнения отличается от суммы долга"
 
 
     @pytest.mark.parametrize(
@@ -49,4 +49,4 @@ class TestCreditRepay:
             term_months
         )
         credit_from_db = CreditCrudDb.get_credit_by_id(db_session, credit_id)
-        assert credit_from_db.balance == amount
+        assert credit_from_db.balance == amount, "Уменьшилась сумма кредита при некорректной сумму платежа"

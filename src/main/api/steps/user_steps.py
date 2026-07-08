@@ -67,15 +67,17 @@ class UserSteps(BaseSteps):
             toAccountId=second_account.id,
             amount=amount
         )
-        response = ValidateCrudRequester(
+        response: AccountTransferResponse = ValidateCrudRequester(
             request_spec=RequestSpecs.auth_headers(create_user_request.username, create_user_request.password),
             endpoint=Endpoint.ACCOUNT_TRANSFER,
             response_spec=ResponseSpecs.request_ok(),
         ).post(account_transfer_request)
+        assert response.fromAccountIdBalance == deposit_amount * 2 - amount, f"Некорректное кол во денег на счету с  id = {response.fromAccountId}"
+
         return response
 
     @staticmethod
-    def account_transfer_invalid(create_user_account, create_user_request: CreateUserRequest, amount: float):
+    def account_transfer_invalid(create_user_account, create_user_request: CreateUserRequest, amount: float) -> int:
         first_account = create_user_account()
         second_account = create_user_account()
         account_transfer_request = AccountTransferRequest(
@@ -88,4 +90,4 @@ class UserSteps(BaseSteps):
             endpoint=Endpoint.ACCOUNT_TRANSFER,
             response_spec=ResponseSpecs.request_unprocessable_content(),
         ).post(account_transfer_request)
-        return first_account.id
+        return second_account.id
