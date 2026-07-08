@@ -17,7 +17,7 @@ class TestAccountDeposit:
         response = api_manager.user_steps.account_deposit_valid(account, create_user_request, amount)
         account_from_db = AccountCrudDb.get_account_by_id(db_session, response.id)
 
-        assert response.balance == amount
+        assert response.balance == amount, "Платеж не прошел"
         assert account_from_db.balance == amount, "Платеж не прошел"
 
 

@@ -15,11 +15,10 @@ class TestCreateUser:
     )
     def test_create_user_valid(self, api_manager: ApiManager, create_user_request: CreateUserRequest, db_session: Session):
         response = api_manager.admin_steps.create_user(create_user_request)
-
-        assert response.username == create_user_request.username
-        assert response.role == create_user_request.role
-
         user_from_db = UserCrudDb.get_user_by_username(db_session, create_user_request.username)
+
+        assert response.username == create_user_request.username, f"Пользователь создался с другим username, ожидался - {create_user_request.username}, по факту - {create_user_request.username}"
+        assert response.role == create_user_request.role, "Пользователь создался с другой ролью, ожидалась - {create_user_request.role}, по факту - {response.role}"
         assert user_from_db.username == create_user_request.username, "Созданного пользователя нет в БД"
 
 
